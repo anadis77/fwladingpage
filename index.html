@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>무료 웨비나 | WAYMAKER LAB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@400;500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1C1C1C;--bg2:#141414;--bg3:#232323;
+  --navy:#111111;--green:#F5A623;--red:#F5A623;
+  --text:#F0F0F0;--muted:#9A9A9A;--border:#2E2E2E;--white:#FFFFFF;
+  --serif:'Noto Serif KR',serif;--sans:'Noto Sans KR',sans-serif;--mono:'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--bg);color:#F0F0F0;overflow-x:hidden;font-size:17px;line-height:1.75;}
+
+/* ── CD BAR ── */
+.cd-bar{position:fixed;top:0;left:0;right:0;z-index:200;background:#111111;display:flex;align-items:center;justify-content:center;gap:12px;padding:7px 1rem;flex-wrap:wrap;}
+.cd-label{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);}
+.cd-units{display:flex;align-items:center;gap:5px;}
+.cd-blk{display:flex;flex-direction:column;align-items:center;min-width:34px;}
+.cd-n{font-family:var(--mono);font-size:18px;font-weight:500;color:#F5A623;line-height:1;}
+.cd-u{font-size:8px;color:rgba(255,255,255,.4);letter-spacing:.1em;font-family:var(--mono);margin-top:2px;}
+.cd-dot{font-family:var(--mono);font-size:16px;color:rgba(255,255,255,.3);margin-bottom:8px;}
+.cd-info{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);}
+.cd-info strong{color:#F5A623;}
+
+/* ── NAV ── */
+nav{position:fixed;top:37px;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 1.75rem;background:rgba(28,28,28,.97);backdrop-filter:blur(12px);border-bottom:1px solid #2E2E2E;}
+.nav-logo{font-family:var(--serif);font-size:13px;font-weight:700;letter-spacing:.08em;color:#F5A623;}
+.nav-cta{font-family:var(--sans);font-size:13px;font-weight:700;color:#111111;background:#F5A623;padding:9px 22px;text-decoration:none;border-radius:3px;transition:opacity .2s;white-space:nowrap;}
+.nav-cta:hover{opacity:.88;}
+
+/* ── TICKER ── */
+.ticker{background:#111111;overflow:hidden;white-space:nowrap;padding:9px 0;}
+.ticker-in{display:inline-flex;animation:tk 28s linear infinite;}
+.tk-item{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:rgba(255,255,255,.65);padding:0 2.5rem;}
+@keyframes tk{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── SHARED ── */
+.sec{padding:5rem 1.75rem;max-width:860px;margin:0 auto;}
+.sec-full{padding:5rem 1.75rem;}
+.sec-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.25em;color:#F5A623;margin-bottom:2rem;display:flex;align-items:center;gap:12px;}
+.sec-lbl::after{content:'';flex:1;height:.5px;background:#2E2E2E;}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.on{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:10rem 1.75rem 5rem;background:var(--bg);border-bottom:1px solid #2E2E2E;}
+.hero-inner{max-width:780px;margin:0 auto;width:100%;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:#111111;color:var(--white);font-family:var(--mono);font-size:11px;letter-spacing:.14em;padding:6px 16px;border-radius:3px;margin-bottom:1.5rem;opacity:0;animation:fu .7s .1s ease forwards;}
+.badge-dot{width:6px;height:6px;background:#F5A623;border-radius:50%;animation:blink 1.5s ease-in-out infinite;flex-shrink:0;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-kicker{font-family:var(--mono);font-size:12px;color:#9A9A9A;margin-bottom:1.25rem;border-left:3px solid #F5A623;padding-left:12px;line-height:1.7;opacity:0;animation:fu .7s .2s ease forwards;}
+.hero h1{font-family:var(--serif);font-weight:900;font-size:clamp(2.4rem,7vw,4.8rem);line-height:1.1;letter-spacing:-.03em;color:#F0F0F0;margin-bottom:1.75rem;opacity:0;animation:fu .8s .3s ease forwards;}
+.hero h1 em{font-style:normal;color:#F5A623;}
+.hero-sub{font-size:clamp(16px,3vw,18px);color:#9A9A9A;line-height:1.85;max-width:580px;margin-bottom:2.5rem;opacity:0;animation:fu .7s .5s ease forwards;}
+.hero-sub strong{color:#F0F0F0;font-weight:600;}
+.hero-btns{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;opacity:0;animation:fu .7s .65s ease forwards;}
+.btn-main{font-family:var(--sans);font-size:clamp(15px,3vw,17px);font-weight:700;color:#111111;background:#F5A623;padding:17px 44px;text-decoration:none;border-radius:3px;transition:opacity .2s;display:inline-block;white-space:nowrap;}
+.btn-main:hover{opacity:.88;}
+.btn-free{font-family:var(--mono);font-size:12px;color:#9A9A9A;letter-spacing:.06em;}
+
+/* ── STATS ── */
+.stat-item{border-left:4px solid #2E2E2E;padding:1.75rem 1.75rem 1.75rem 2rem;background:#232323;margin-bottom:1px;border-top:1px solid #2E2E2E;}
+.stat-item.danger{border-left-color:#F5A623;}
+.stat-n{font-family:var(--serif);font-size:clamp(3rem,9vw,5rem);font-weight:900;line-height:1;margin-bottom:.5rem;color:#F5A623;}
+.stat-item.danger .stat-n{color:#F5A623;}
+.stat-title{font-size:clamp(16px,3.5vw,19px);font-weight:700;color:#F0F0F0;margin-bottom:.4rem;}
+.stat-desc{font-size:clamp(14px,3vw,15px);color:#9A9A9A;line-height:1.75;}
+.stat-src{font-family:var(--mono);font-size:11px;color:rgba(107,114,128,.6);margin-top:.4rem;}
+
+/* ── CASE BLOCK ── */
+.case-block{background:#232323;border:1px solid #2E2E2E;border-left:4px solid #F5A623;padding:2rem;margin-top:2rem;}
+.case-co{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:#F5A623;margin-bottom:.75rem;display:flex;align-items:center;gap:8px;}
+.case-co::before{content:'';width:6px;height:6px;background:var(--red);border-radius:50%;flex-shrink:0;}
+.case-big{font-family:var(--serif);font-size:clamp(1.5rem,4.5vw,2.2rem);font-weight:900;color:#F0F0F0;margin-bottom:.5rem;}
+.case-txt{font-size:clamp(15px,3vw,16px);color:#9A9A9A;line-height:1.75;}
+.case-quote{margin-top:1.25rem;padding:1rem 1.5rem;background:#111111;font-family:var(--serif);font-size:clamp(14px,3vw,15px);font-style:italic;color:#9A9A9A;line-height:1.65;border-left:2px solid var(--border);}
+.case-quote cite{display:block;font-family:var(--mono);font-size:10px;font-style:normal;color:rgba(107,114,128,.7);margin-top:6px;}
+
+/* ── HOOK ── */
+.hook{padding:4.5rem 1.75rem;text-align:center;background:#111111;}
+.hook p{font-family:var(--serif);font-size:clamp(1.7rem,5vw,3rem);font-weight:900;line-height:1.2;color:var(--white);max-width:640px;margin:0 auto;}
+.hook p em{font-style:normal;color:#F5A623;}
+.hook p strong{color:#F5A623;}
+.hook-sub{font-size:clamp(14px,3vw,16px);color:rgba(255,255,255,.5);margin-top:1rem;font-family:var(--mono);letter-spacing:.04em;}
+
+/* ── MID CTA ── */
+.mid-cta{padding:3.5rem 1.75rem;text-align:center;background:#F5A623;}
+.mid-cta p{font-family:var(--serif);font-size:clamp(1.3rem,4vw,2rem);font-weight:900;color:#111111;margin-bottom:.5rem;line-height:1.3;}
+.mid-cta span{font-family:var(--mono);font-size:12px;color:rgba(17,17,17,.6);display:block;margin-bottom:1.5rem;}
+.btn-white{font-family:var(--sans);font-size:clamp(15px,3vw,17px);font-weight:700;color:#F5A623;background:#111111;padding:15px 44px;text-decoration:none;border-radius:3px;display:inline-block;transition:opacity .2s;}
+.btn-white:hover{opacity:.9;}
+
+/* ── WHO (checklist) ── */
+.who-title{font-family:var(--serif);font-size:clamp(1.8rem,5vw,3rem);font-weight:900;line-height:1.2;color:#F0F0F0;margin-bottom:.5rem;}
+.who-title em{font-style:normal;color:#F5A623;}
+.who-sub{font-size:clamp(15px,3vw,16px);color:#9A9A9A;margin-bottom:2.5rem;}
+.check-list{display:flex;flex-direction:column;gap:10px;}
+.check-item{display:flex;gap:16px;align-items:flex-start;padding:1.25rem 1.5rem;background:#232323;border:1px solid #2E2E2E;border-radius:6px;transition:border-color .2s;}
+.check-item:hover{border-color:#F5A623;}
+.check-box{width:22px;height:22px;border:1.5px solid #F5A623;border-radius:4px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;background:rgba(245,166,35,.08);}
+.check-box svg{width:12px;height:12px;stroke:#F5A623;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.check-body h3{font-size:clamp(15px,3.5vw,17px);font-weight:700;color:#F0F0F0;margin-bottom:4px;line-height:1.4;}
+.check-body p{font-size:clamp(14px,3vw,15px);color:#9A9A9A;line-height:1.65;}
+
+/* ── PAIN ── */
+.pain-head{font-family:var(--serif);font-size:clamp(1.7rem,5vw,2.8rem);font-weight:900;line-height:1.2;color:#F0F0F0;margin-bottom:.5rem;}
+.pain-head em{font-style:normal;color:#F5A623;}
+.pain-sub{font-size:clamp(15px,3vw,16px);color:#9A9A9A;margin-bottom:2.5rem;line-height:1.7;}
+.pain-cards{display:flex;flex-direction:column;gap:12px;}
+.pain-card{background:#232323;border:1px solid #2E2E2E;border-radius:8px;overflow:hidden;}
+.pain-q{padding:1.5rem 1.75rem 1.25rem;border-bottom:1px solid #2E2E2E;}
+.pain-q-tag{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:#F5A623;border:.5px solid var(--red);display:inline-block;padding:3px 10px;border-radius:3px;margin-bottom:.75rem;}
+.pain-q-text{font-family:var(--serif);font-size:clamp(16px,3.5vw,19px);font-weight:700;color:#F0F0F0;line-height:1.4;margin-bottom:.4rem;}
+.pain-q-text::before{content:'"';color:#F5A623;opacity:.5;}
+.pain-q-text::after{content:'"';color:#F5A623;opacity:.5;}
+.pain-who{font-family:var(--mono);font-size:11px;color:#9A9A9A;}
+.pain-sol{padding:1.25rem 1.75rem 1.5rem;}
+.pain-s-tag{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:#F5A623;border:.5px solid #F5A623;display:inline-block;padding:3px 10px;border-radius:3px;margin-bottom:.75rem;}
+.pain-s-title{font-size:clamp(15px,3.5vw,17px);font-weight:700;color:#F0F0F0;margin-bottom:.4rem;}
+.pain-s-desc{font-size:clamp(14px,3vw,15px);color:#9A9A9A;line-height:1.7;}
+.pain-bridge{margin-top:2rem;padding:1.75rem;border:1px solid rgba(245,166,35,.2);background:rgba(245,166,35,.05);border-radius:8px;text-align:center;}
+.pain-bridge p{font-family:var(--serif);font-size:clamp(1.1rem,3.5vw,1.4rem);font-weight:700;color:#F0F0F0;margin-bottom:.4rem;}
+.pain-bridge span{font-family:var(--mono);font-size:11px;color:#9A9A9A;}
+
+/* ── SPEAKER ── */
+.speaker-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+@media(max-width:680px){.speaker-grid{grid-template-columns:1fr;gap:2.5rem;}}
+.sp-name{font-family:var(--serif);font-size:clamp(3.5rem,11vw,6rem);font-weight:900;line-height:.9;letter-spacing:-.04em;color:#F0F0F0;margin-bottom:.4rem;}
+.sp-role{font-family:var(--mono);font-size:11px;color:#9A9A9A;letter-spacing:.06em;line-height:1.9;margin-bottom:2rem;}
+.career-row{display:grid;grid-template-columns:70px 1fr 38px;gap:.75rem;align-items:start;padding:.9rem 0;border-bottom:1px solid #2E2E2E;}
+.c-co{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:#F5A623;padding-top:3px;font-weight:500;}
+.c-role{font-size:clamp(13px,2.8vw,14px);color:#9A9A9A;line-height:1.6;}
+.c-yr{font-family:var(--mono);font-size:10px;color:#9A9A9A;text-align:right;padding-top:3px;}
+.diff-tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:var(--white);background:#111111;padding:4px 14px;border-radius:3px;margin-bottom:1.5rem;}
+.diff-box{border-left:3px solid #F5A623;padding:1.5rem 1.5rem;background:#232323;border-radius:0 8px 8px 0;margin-bottom:2rem;border:1px solid #2E2E2E;border-left:3px solid #F5A623;}
+.diff-box p{font-family:var(--serif);font-size:clamp(1rem,3.2vw,1.1rem);line-height:1.9;color:#F0F0F0;}
+.diff-box strong{color:#F5A623;}
+.ach-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.ach{padding:1rem 1.25rem;border:1px solid #2E2E2E;border-radius:6px;background:#232323;}
+.ach-n{font-family:var(--serif);font-size:1.6rem;font-weight:900;color:#F0F0F0;margin-bottom:3px;}
+.ach-l{font-size:12px;color:#9A9A9A;}
+
+/* ── CURRICULUM ── */
+.curr-title{font-family:var(--serif);font-size:clamp(1.7rem,5vw,3rem);font-weight:900;line-height:1.15;color:#F5A623;}
+.curr-meta{font-family:var(--mono);font-size:11px;color:#9A9A9A;line-height:1.9;}
+.curr-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;}
+.curr-row{display:grid;grid-template-columns:60px 1fr auto;gap:1.25rem;align-items:start;padding:1.5rem 0;border-bottom:1px solid #2E2E2E;}
+.c-num{font-family:var(--serif);font-size:1.8rem;color:#F5A623;font-weight:900;line-height:1;}
+.c-body h3{font-family:var(--serif);font-size:clamp(16px,3.5vw,19px);font-weight:700;color:#F0F0F0;margin-bottom:5px;}
+.c-body p{font-size:clamp(13px,2.8vw,14px);color:#9A9A9A;line-height:1.7;}
+.c-pain{display:block;margin-top:5px;font-family:var(--mono);font-size:11px;color:#F5A623;}
+.c-tag{font-family:var(--mono);font-size:10px;letter-spacing:.06em;padding:5px 10px;border:.5px solid;white-space:nowrap;border-radius:3px;margin-top:4px;}
+.t-live{color:#F0F0F0;border-color:#F5A623;}
+.t-demo{color:#F5A623;border-color:#F5A623;}
+
+/* ── RESULTS (섹션 06 수정) ── */
+.take-title{font-family:var(--serif);font-size:clamp(1.7rem,5vw,2.8rem);font-weight:900;line-height:1.2;color:#F0F0F0;margin-bottom:.5rem;}
+.take-title em{font-style:normal;color:#F5A623;}
+.take-sub{font-size:clamp(15px,3vw,16px);color:#9A9A9A;margin-bottom:2.5rem;line-height:1.7;}
+.take-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:1.75rem;}
+@media(max-width:640px){.take-grid{grid-template-columns:1fr;}}
+.take-card{background:#232323;border:1px solid #2E2E2E;border-radius:8px;padding:2rem 1.75rem;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+.take-card:hover{border-color:#F5A623;transform:translateY(-3px);}
+.take-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);transform:scaleX(0);transform-origin:left;transition:transform .3s;}
+.take-card:hover::before{transform:scaleX(1);}
+.take-num{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:#F5A623;margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+.take-num::after{content:'';flex:1;height:.5px;background:#2E2E2E;}
+.take-icon{font-size:2rem;margin-bottom:.85rem;display:block;}
+.take-card h3{font-family:var(--serif);font-size:clamp(16px,3.5vw,19px);font-weight:900;color:#F0F0F0;margin-bottom:.6rem;line-height:1.3;}
+.take-card p{font-size:clamp(13px,2.8vw,14px);color:#9A9A9A;line-height:1.7;}
+.take-tag{display:inline-block;margin-top:1rem;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:#F5A623;border:.5px solid #F5A623;padding:4px 10px;border-radius:3px;}
+.bonus-bar{background:#111111;border-radius:8px;padding:1.5rem 2rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;}
+.bonus-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:rgba(255,255,255,.45);white-space:nowrap;}
+.bonus-txt{font-family:var(--serif);font-size:clamp(15px,3vw,17px);font-weight:700;color:#F5A623;flex:1;line-height:1.4;}
+.bonus-note{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.4);}
+
+.not-title{font-family:var(--serif);font-size:clamp(1.5rem,4.5vw,2.5rem);font-weight:900;color:#F0F0F0;margin-bottom:.5rem;}
+.not-sub{font-size:clamp(15px,3vw,16px);color:#9A9A9A;margin-bottom:2.5rem;line-height:1.7;}
+.not-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:2rem;}
+.not-card{display:flex;gap:1.25rem;align-items:flex-start;background:#232323;border:1px solid #2E2E2E;border-radius:8px;padding:1.25rem 1.5rem;border-left:4px solid #DDD6CE;transition:border-left-color .2s;}
+.not-card:hover{border-left-color:#F5A623;}
+.not-ic-wrap{width:40px;height:40px;border-radius:50%;background:rgba(139,37,0,.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;}
+.not-body h3{font-size:clamp(15px,3.5vw,16px);font-weight:700;color:#F0F0F0;margin-bottom:5px;line-height:1.4;}
+.not-body p{font-size:clamp(13px,3vw,14px);color:#9A9A9A;line-height:1.65;}
+.fit-box{background:#111111;border-radius:8px;padding:1.75rem 2rem;}
+.fit-box-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:#F5A623;margin-bottom:1.1rem;}
+.fit-list{display:flex;flex-direction:column;gap:.6rem;}
+.fit-item{display:flex;gap:10px;align-items:flex-start;font-size:clamp(14px,3vw,15px);color:rgba(255,255,255,.82);line-height:1.65;}
+
+/* ── SEATS ── */
+.seats-wrap{background:#141414;border-top:1px solid #2E2E2E;border-bottom:1px solid #2E2E2E;text-align:center;padding:5rem 1.75rem;}
+.seats-big{font-family:var(--serif);font-size:clamp(1.8rem,5.5vw,3.5rem);font-weight:900;line-height:1.15;color:#F0F0F0;margin-bottom:1rem;}
+.seats-big em{font-style:normal;color:#F5A623;}
+.seats-desc{font-size:clamp(15px,3.5vw,17px);color:#9A9A9A;line-height:1.8;max-width:500px;margin:0 auto 1.5rem;}
+.seats-reason{display:flex;justify-content:center;flex-wrap:wrap;gap:.75rem;margin-bottom:2.5rem;}
+.seats-chip{font-family:var(--mono);font-size:11px;padding:6px 14px;border:.5px solid rgba(42,92,69,.4);color:#F5A623;border-radius:3px;letter-spacing:.04em;}
+
+
+
+/* ── TESTIMONIALS ── */
+.test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.25rem;}
+.test-card{padding:1.75rem;border:1px solid #2E2E2E;border-radius:8px;background:#232323;position:relative;}
+.test-card::before{content:'"';font-family:var(--serif);font-size:5rem;color:#F5A623;opacity:.12;position:absolute;top:.25rem;left:1.5rem;line-height:1;}
+.test-txt{font-size:clamp(14px,3vw,15px);color:#F0F0F0;line-height:1.8;margin-bottom:1.25rem;padding-top:1.5rem;}
+.test-who{display:flex;align-items:center;gap:10px;}
+.test-av{width:36px;height:36px;border-radius:50%;background:rgba(245,166,35,.1);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:#F5A623;border:1px solid rgba(42,92,69,.2);flex-shrink:0;font-weight:500;}
+.test-info p{font-size:clamp(13px,3vw,14px);font-weight:700;color:#F5A623;}
+.test-info span{font-family:var(--mono);font-size:10px;color:#9A9A9A;}
+
+/* ── FAQ ── */
+.faq-title{font-family:var(--serif);font-size:clamp(1.7rem,5vw,2.8rem);font-weight:900;color:#F0F0F0;margin-bottom:.5rem;}
+.faq-sub{font-size:clamp(15px,3vw,16px);color:#9A9A9A;margin-bottom:2.5rem;}
+.faq-list{display:flex;flex-direction:column;gap:8px;}
+.faq-item{background:#232323;border:1px solid #2E2E2E;border-radius:8px;overflow:hidden;}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:1.25rem 1.5rem;cursor:pointer;gap:1rem;font-size:clamp(15px,3.5vw,16px);font-weight:700;color:#F0F0F0;line-height:1.4;}
+.faq-icon{font-family:var(--mono);font-size:18px;color:#F5A623;flex-shrink:0;transition:transform .25s;line-height:1;}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+.faq-a{display:none;padding:0 1.5rem 1.25rem;font-size:clamp(14px,3vw,15px);color:#9A9A9A;line-height:1.75;border-top:1px solid var(--border);padding-top:1rem;}
+.faq-item.open .faq-a{display:block;}
+
+/* ── FINAL CTA ── */
+.final-cta{padding:7rem 1.75rem;text-align:center;background:#111111;position:relative;overflow:hidden;}
+.final-bg{position:absolute;font-family:var(--serif);font-size:28vw;font-weight:900;color:rgba(255,255,255,.025);top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none;}
+.final-badge{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:#F5A623;border:.5px solid rgba(255,207,107,.4);display:inline-block;padding:5px 16px;border-radius:3px;margin-bottom:2rem;position:relative;}
+.final-cta h2{font-family:var(--serif);font-size:clamp(2rem,7vw,5rem);font-weight:900;line-height:1.1;color:var(--white);margin-bottom:1.25rem;position:relative;}
+.final-cta h2 em{font-style:normal;color:#F5A623;}
+.final-cta>p{font-size:clamp(15px,3vw,17px);color:rgba(255,255,255,.55);margin-bottom:3rem;line-height:1.8;position:relative;}
+.detail-row{display:flex;justify-content:center;gap:3rem;margin-bottom:3rem;flex-wrap:wrap;position:relative;}
+.d-item{text-align:center;}
+.d-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:rgba(255,255,255,.4);display:block;margin-bottom:5px;}
+.d-val{font-family:var(--serif);font-size:clamp(1.2rem,3.5vw,1.6rem);font-weight:900;color:var(--white);}
+.d-val.ac{color:#F5A623;}
+.cd-big{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 0 3rem;flex-wrap:wrap;position:relative;}
+.cd-bb{display:flex;flex-direction:column;align-items:center;padding:.75rem 1rem;border:.5px solid rgba(255,255,255,.15);border-radius:4px;min-width:64px;}
+.cd-bn{font-family:var(--mono);font-size:clamp(1.8rem,5vw,2.5rem);font-weight:500;color:#F5A623;line-height:1;}
+.cd-bu{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.1em;margin-top:4px;}
+.cd-bs{font-family:var(--mono);font-size:2rem;color:rgba(255,255,255,.2);margin-bottom:14px;}
+.seats-note{font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.4);margin-top:1rem;letter-spacing:.04em;}
+.seats-note strong{color:#F5A623;}
+
+/* ── FOOTER ── */
+footer{padding:2rem 1.75rem;border-top:1px solid #2E2E2E;background:#111111;}
+.f-inner{max-width:860px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem;}
+.f-logo{font-family:var(--serif);font-size:13px;font-weight:700;color:#F0F0F0;letter-spacing:.06em;}
+.f-links{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;}
+.f-copy{font-family:var(--mono);font-size:11px;color:#9A9A9A;}
+.f-link{font-family:var(--mono);font-size:11px;color:#9A9A9A;background:none;border:none;cursor:pointer;text-decoration:none;}
+.f-link:hover{color:#F5A623;}
+
+/* ── FLOAT CTA ── */
+.float-cta{position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%);z-index:300;display:none;background:var(--green);color:var(--white);font-family:var(--sans);font-size:clamp(14px,3.5vw,15px);font-weight:700;padding:14px 36px;text-decoration:none;border-radius:3px;box-shadow:0 8px 32px rgba(245,166,35,.25);white-space:nowrap;}
+.float-cta.show{display:inline-block;}
+
+/* ── MODAL ── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem;}
+.modal-bg.open{display:flex;}
+.modal{background:#232323;border:1px solid #2E2E2E;border-radius:8px;padding:2.5rem 2rem;max-width:420px;width:100%;position:relative;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(13,43,75,.15);}
+.modal-close{position:absolute;top:1rem;right:1rem;font-family:var(--mono);font-size:18px;color:#9A9A9A;cursor:pointer;background:none;border:none;}
+.modal h2{font-family:var(--serif);font-size:clamp(1.3rem,4vw,1.6rem);font-weight:900;color:#F0F0F0;margin-bottom:.4rem;}
+.modal-sub{font-size:13px;color:#9A9A9A;margin-bottom:1.75rem;line-height:1.6;}
+.form-group{margin-bottom:1rem;}
+.form-group label{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:#9A9A9A;display:block;margin-bottom:6px;}
+.form-group input{width:100%;padding:13px 14px;background:#141414;border:1px solid #2E2E2E;color:#F0F0F0;font-family:var(--sans);font-size:16px;outline:none;transition:border-color .2s;border-radius:4px;}
+.form-group input:focus{border-color:#F5A623;}
+.form-group input::placeholder{color:#9A9A9A;font-size:15px;}
+.form-optional{font-family:var(--mono);font-size:10px;color:#9A9A9A;margin-left:6px;}
+.btn-submit{width:100%;padding:16px;background:#F5A623;color:#111111;font-family:var(--sans);font-size:clamp(15px,3.5vw,16px);font-weight:700;border:none;cursor:pointer;margin-top:.5rem;border-radius:4px;transition:opacity .2s;}
+.btn-submit:hover{opacity:.88;}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;}
+.privacy-note{font-family:var(--mono);font-size:11px;color:#9A9A9A;margin-top:.85rem;line-height:1.6;text-align:center;}
+.privacy-link{font-family:var(--mono);font-size:11px;color:#F5A623;background:none;border:none;cursor:pointer;text-decoration:underline;}
+.form-done{display:none;text-align:center;padding:1.5rem 0;}
+.form-done h3{font-family:var(--serif);font-size:clamp(1.3rem,4vw,1.6rem);font-weight:900;color:#F5A623;margin-bottom:.75rem;}
+.form-done p{font-size:clamp(14px,3vw,15px);color:#9A9A9A;line-height:1.7;}
+.priv-modal{background:#1C1C1C;border-radius:8px;padding:2.5rem 2rem;max-width:480px;width:100%;position:relative;max-height:85vh;overflow-y:auto;}
+.priv-modal h2{font-family:var(--serif);font-size:1.4rem;font-weight:900;color:#F0F0F0;margin-bottom:1.5rem;}
+.priv-modal p{font-size:14px;color:#9A9A9A;line-height:1.75;margin-bottom:1rem;}
+.priv-modal p strong{color:#F0F0F0;display:block;margin-bottom:.25rem;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .take-grid{grid-template-columns:1fr;}
+  .curr-row{grid-template-columns:48px 1fr;}.c-tag{display:none;}
+}
+@media(max-width:580px){
+  nav{padding:.85rem 1.25rem;}
+  .cd-label{display:none;}
+  .hero{padding:8rem 1.25rem 4rem;}
+  .sec{padding:4rem 1.25rem;}
+  .sec-full{padding:4rem 1.25rem;}
+  .detail-row{gap:1.5rem;}
+  .final-cta .btn-main{width:100%;text-align:center;padding:17px 24px;}
+  .float-cta{width:calc(100% - 2.5rem);text-align:center;}
+  footer .f-inner{flex-direction:column;align-items:flex-start;}
+  .course-note{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ CD BAR ═══ -->
+<div class="cd-bar" id="cd-bar">
+  <span class="cd-label">웨비나까지</span>
+  <div class="cd-units">
+    <div class="cd-blk"><span class="cd-n" id="cd-d">--</span><span class="cd-u">DAYS</span></div>
+    <span class="cd-dot">:</span>
+    <div class="cd-blk"><span class="cd-n" id="cd-h">--</span><span class="cd-u">HRS</span></div>
+    <span class="cd-dot">:</span>
+    <div class="cd-blk"><span class="cd-n" id="cd-m">--</span><span class="cd-u">MIN</span></div>
+    <span class="cd-dot">:</span>
+    <div class="cd-blk"><span class="cd-n" id="cd-s">--</span><span class="cd-u">SEC</span></div>
+  </div>
+  <span class="cd-info">5월 1일 (목) 8PM · 완전 무료</span>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-logo">WAYMAKER LAB</div>
+  <a href="#" class="nav-cta" onclick="openModal();return false;">무료 신청</a>
+</nav>
+
+<!-- ═══ ① HERO ═══ -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="badge-dot"></span>무료 웨비나 · 5월 1일 (목) 밤 8시</div>
+    <div class="hero-kicker">삼성 10년 · 네이버 9년 · 쿠팡 Sr.PO — 25년 현직 PM의 첫 공개 강의</div>
+    <h1>지금 안 바뀌면,<br><em>당신 자리가 없어집니다.</em></h1>
+    <p class="hero-sub">
+      AI 모르는 직장인부터 잘립니다.<br>
+      <strong>5월 1일 밤, 90분이 답입니다.</strong>
+    </p>
+    <div class="hero-btns">
+      <a href="#" class="btn-main" onclick="openModal();return false;">지금 무료 신청하기</a>
+      <span class="btn-free">완전 무료 · 90분</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TICKER ═══ -->
+<div class="ticker">
+  <div class="ticker-in">
+    <span class="tk-item">AI 사용법 말고, AI 솔루션</span><span class="tk-item">✦</span>
+    <span class="tk-item">삼성·네이버·쿠팡 25년 PM이 직접 알려드립니다</span><span class="tk-item">✦</span>
+    <span class="tk-item">5월 1일 목요일 밤 8시 · 완전 무료</span><span class="tk-item">✦</span>
+    <span class="tk-item">지금 신청하세요</span><span class="tk-item">✦</span>
+    <span class="tk-item">AI 사용법 말고, AI 솔루션</span><span class="tk-item">✦</span>
+    <span class="tk-item">삼성·네이버·쿠팡 25년 PM이 직접 알려드립니다</span><span class="tk-item">✦</span>
+    <span class="tk-item">5월 1일 목요일 밤 8시 · 완전 무료</span><span class="tk-item">✦</span>
+    <span class="tk-item">지금 신청하세요</span><span class="tk-item">✦</span>
+  </div>
+</div>
+
+<!-- ═══ ② CRISIS (01) ═══ -->
+<section class="sec" style="border-top:1px solid #2E2E2E;">
+  <div class="sec-lbl">01 · 지금 무슨 일이 벌어지고 있나</div>
+
+  <div class="stat-item reveal">
+    <div class="stat-n">48<span style="font-size:55%;color:#9A9A9A;">%</span></div>
+    <div class="stat-title">직장인 2명 중 1명 — "AI가 내 일자리를 대체할 것"</div>
+    <div class="stat-desc">이미 공포가 아닙니다. 실제로 일어나고 있는 일입니다.</div>
+    <div class="stat-src">직장갑질119 · 2026.01</div>
+  </div>
+  <div class="stat-item danger reveal d1">
+    <div class="stat-n">7.1<span style="font-size:55%;color:#9A9A9A;">만</span></div>
+    <div class="stat-title">AI 도입을 이유로 해고된 누적 근로자 수 — 지금도 늘고 있다</div>
+    <div class="stat-desc">숫자는 매 분기 경신되고 있습니다.</div>
+    <div class="stat-src">챌린저 그레이 앤드 크리스마스 · 2025 (미국 기준)</div>
+  </div>
+
+  <div class="case-block reveal d2">
+    <div class="case-co">BLOCK — 잭 도시 설립</div>
+    <div class="case-big">직원 40%, 하루아침에 해고</div>
+    <div class="case-txt">AI 도구 도입을 이유로 1만 명 중 4,000명 감원. 해고 발표 당일 주가 25% 상승. 투자자들은 박수를 쳤다.</div>
+    <div class="case-quote">"훨씬 더 적은 인원이 AI 도구로 더 많은 일을 더 잘 해낼 수 있다."<cite>— 잭 도시 CEO · 4,000명 해고 당일</cite></div>
+  </div>
+</section>
+
+<!-- ═══ ③ HOOK 1 ═══ -->
+<div class="hook">
+  <p>AI가 적이 아닙니다.<br><em>안 쓰는 것</em>이 적입니다.</p>
+  <p class="hook-sub">지금 이 순간에도 격차는 벌어지고 있습니다.</p>
+</div>
+
+<!-- ═══ ④ WHO FOR (02) ═══ -->
+<section class="sec" style="border-top:1px solid #2E2E2E;">
+  <div class="sec-lbl">02 · 이런 분께 딱 맞습니다</div>
+  <p class="who-title reveal">혹시 <em>이런 분</em> 아닌가요?</p>
+  <p class="who-sub reveal">3개 이상 해당되면 이 웨비나가 필요합니다.</p>
+  <div class="check-list reveal d1">
+    <div class="check-item">
+      <div class="check-box"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+      <div class="check-body">
+        <h3>AI 쓰긴 쓰는데 업무가 안 바뀐 직장인</h3>
+        <p>ChatGPT·Claude 열어봤지만 번역·요약에서 못 벗어나고 있는 상황</p>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="check-box"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+      <div class="check-body">
+        <h3>팀장한테 "AI 좀 써봐" 소리 듣는 직장인</h3>
+        <p>뭘 어떻게 써야 할지 몰라서 막막하고, 혼자 구글링해도 답이 안 나오는 상황</p>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="check-box"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+      <div class="check-body">
+        <h3>AI 성과를 위에 보고해야 하는 담당자</h3>
+        <p>"AI 도입 성과" 보고서를 써야 하는데 증거가 없어서 막막한 상황</p>
+      </div>
+    </div>
+    <div class="check-item">
+      <div class="check-box"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+      <div class="check-body">
+        <h3>팀 전체를 AI로 바꾸고 싶은 팀장·리더</h3>
+        <p>나 혼자 아는 것으로는 한계 — 팀 전체를 끌고 갈 체계가 필요한 상황</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ⑤ MID CTA 1 ═══ -->
+<div class="mid-cta reveal">
+  <p>지금 이 순간에도<br>자리는 줄어들고 있습니다.</p>
+  <span>5월 1일 밤 90분으로 먼저 움직이세요 · 완전 무료</span>
+  <a href="#" class="btn-white" onclick="openModal();return false;">지금 자리 확보하기</a>
+</div>
+
+<!-- ═══ ⑥ PAIN POINTS (03) ═══ -->
+<section class="sec" style="border-top:1px solid #2E2E2E;background:#141414;">
+  <div class="sec-lbl">03 · 왜 써도 효과가 없을까</div>
+  <p class="pain-head reveal">문제는 AI가 아닙니다.<br><em>쓰는 방식</em>이 틀렸습니다.</p>
+  <p class="pain-sub reveal">AI를 써봤지만 달라진 게 없다면, 당신 잘못이 아닙니다. 아무도 제대로 된 방법을 알려주지 않았기 때문입니다.</p>
+
+  <div class="pain-cards reveal d1">
+    <div class="pain-card">
+      <div class="pain-q">
+        <div class="pain-q-tag">페인 01</div>
+        <div class="pain-q-text">결과물이 들쭉날쭉해서 그냥 내가 다시 씁니다</div>
+        <div class="pain-who">기획자·마케터 대부분이 겪는 문제</div>
+      </div>
+      <div class="pain-sol">
+        <div class="pain-s-tag">SOLUTION</div>
+        <div class="pain-s-title">프롬프트를 설계하면 결과가 일정해집니다</div>
+        <div class="pain-s-desc">말 걸듯 쓰는 게 문제입니다. System Prompt와 프롬프트 라이브러리를 만들면 매번 동일한 품질이 나옵니다.</div>
+      </div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-q">
+        <div class="pain-q-tag">페인 02</div>
+        <div class="pain-q-text">번역·요약에만 씁니다. 진짜 업무엔 못 쓰겠어요</div>
+        <div class="pain-who">AI를 검색 대체 수준으로만 활용 중</div>
+      </div>
+      <div class="pain-sol">
+        <div class="pain-s-tag">SOLUTION</div>
+        <div class="pain-s-title">AI를 워크플로우 안에 넣는 법이 있습니다</div>
+        <div class="pain-s-desc">기획서·보고서·제안서에 AI 못 쓰는 건 불신 때문입니다. AI가 할 일과 내가 할 일을 나누면 퀄리티가 올라갑니다.</div>
+      </div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-q">
+        <div class="pain-q-tag">페인 03</div>
+        <div class="pain-q-text">자동화는 개발자나 하는 거 아닌가요?</div>
+        <div class="pain-who">Claude Code·바이브코딩에 진입장벽을 느낌</div>
+      </div>
+      <div class="pain-sol">
+        <div class="pain-s-tag">SOLUTION</div>
+        <div class="pain-s-title">비개발자가 할 수 있는 자동화가 따로 있습니다</div>
+        <div class="pain-s-desc">할 수 있는 것과 없는 것을 정직하게 구분해드립니다. 코딩 없이 즉시 결과물을 만드는 것부터 시작합니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pain-bridge reveal">
+    <p>이 3가지, 웨비나 90분 안에 직접 보여드립니다.</p>
+    <span>강의가 아니라 처방전입니다 — WAYMAKER LAB</span>
+  </div>
+</section>
+
+<!-- ═══ ⑦ HOOK 2 ═══ -->
+<div class="hook">
+  <p>결과물이<br><strong>있으신가요?</strong></p>
+  <p class="hook-sub">없다면, 지금까지 들은 강의가 전부 맛보기였던 겁니다.</p>
+</div>
+
+<!-- ═══ ⑧ SPEAKER (04) ═══ -->
+<section class="sec" style="border-top:1px solid #2E2E2E;">
+  <div class="sec-lbl">04 · 강사 소개</div>
+  <div class="speaker-grid">
+    <div>
+      <div class="sp-name reveal">Kai</div>
+      <div class="sp-role reveal">WAYMAKER LAB 대표 · AI 비즈니스 컨설턴트</div>
+      <div class="reveal">
+        <div class="career-row"><div class="c-co">NAVER</div><div class="c-role">개발자 → Japan Localizing Manager<br>한게임 현지화·개발자 교육</div><div class="c-yr">11년</div></div>
+        <div class="career-row"><div class="c-co">SAMSUNG</div><div class="c-role">글로벌 메신저 & 광고 플랫폼 PM<br>누적 2억 유저 · 1조 매출 기여</div><div class="c-yr">10년</div></div>
+        <div class="career-row"><div class="c-co">COUPANG</div><div class="c-role">Logistic & 광고 Sr.PO</div><div class="c-yr">2년</div></div>
+        <div class="career-row"><div class="c-co">NOW</div><div class="c-role">AX 컨설팅 · AI 강의<br>현재 11개사 컨설팅 진행 중</div><div class="c-yr">현재</div></div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="diff-tag">WHY KAI?</div>
+      <div class="diff-box">
+        <p>저는 여러분께 단순히<br>'AI 툴 사용법'을 알려드리는<br>AI 강사가 아닙니다.<br><br>삼성·네이버·쿠팡에서 25년간<br>직접 서비스를 기획하고 운영하며<br><strong>'업무를 시스템으로 만드는 법'</strong><br>그 자체를 설계해온 사람입니다.<br><br>이론이 아닙니다.<br>먼저 해본 사람의 이야기입니다.</p>
+      </div>
+      <div class="ach-grid">
+        <div class="ach"><div class="ach-n">2억</div><div class="ach-l">삼성 누적 유저</div></div>
+        <div class="ach"><div class="ach-n">1조</div><div class="ach-l">삼성 매출 기여</div></div>
+        <div class="ach"><div class="ach-n">25년</div><div class="ach-l">IT 현장 경력</div></div>
+        <div class="ach"><div class="ach-n">11개</div><div class="ach-l">기업 컨설팅 중</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ⑨ MID CTA 2 ═══ -->
+<div class="mid-cta reveal">
+  <p>이론이 아닌, 내일 쓸 방법을 드립니다</p>
+  <span>무료 웨비나 · 5월 1일 목요일 밤 8시</span>
+  <a href="#" class="btn-white" onclick="openModal();return false;">무료 자리 잡기 →</a>
+</div>
+
+<!-- ═══ ⑩ CURRICULUM (05) ═══ -->
+<section class="sec" id="curriculum" style="border-top:1px solid #2E2E2E;">
+  <div class="sec-lbl">05 · 웨비나에서 일어나는 일</div>
+  <div class="curr-head reveal">
+    <div class="curr-title">이 날 밤,<br>3가지가 일어납니다</div>
+    <div class="curr-meta">총 90분 · 실시간 온라인<br>Q&A 포함 · 무료</div>
+  </div>
+  <div class="reveal d1">
+    <div class="curr-row">
+      <div class="c-num">하나.</div>
+      <div class="c-body">
+        <h3>내 AI 레벨을 처음으로 정확히 압니다</h3>
+        <p>AI 레벨 7단계 자가진단 + 실제 해고 데이터로 지금 내 위치가 어딘지 명확해집니다.<span class="c-pain">→ "나는 몇 레벨인가"가 선명해지는 순간</span></p>
+      </div>
+      <div class="c-tag t-live">20분</div>
+    </div>
+    <div class="curr-row">
+      <div class="c-num">둘.</div>
+      <div class="c-body">
+        <h3>코딩 없이 서비스 만드는 걸 눈으로 봅니다</h3>
+        <p>어떤 툴인지, 어떻게 만드는지 — 현장에서 라이브로 직접 보여드립니다.<span class="c-pain">→ "나도 할 수 있겠다"가 되는 순간</span></p>
+      </div>
+      <div class="c-tag t-demo">현장 공개</div>
+    </div>
+    <div class="curr-row">
+      <div class="c-num">셋.</div>
+      <div class="c-body">
+        <h3>내 업무에 바로 쓸 프롬프트를 손에 쥡니다</h3>
+        <p>나쁜 프롬프트 vs 좋은 프롬프트 라이브 비교 + 템플릿 5종 즉시 제공.<span class="c-pain">→ 내일 출근하면 바로 쓰는 순간</span></p>
+      </div>
+      <div class="c-tag t-live">15분</div>
+    </div>
+  </div>
+  <div class="pain-bridge reveal" style="margin-top:2rem;">
+    <p>강의가 아니라 처방전입니다.</p>
+    <span>90분 · 완전 무료 — WAYMAKER LAB</span>
+  </div>
+</section>
+
+<!-- ═══ ⑪ HOOK 3 ═══ -->
+<div class="hook">
+  <p>90분 후,<br>당신은 <strong>달라집니다.</strong></p>
+  <p class="hook-sub">AI 강의가 아닙니다. AI 처방전입니다.</p>
+</div>
+
+<!-- ═══ ⑫ RESULTS (06) — 수정: 웨비나 당일 가져가는 것만 ═══ -->
+<section class="sec" style="border-top:1px solid #2E2E2E;">
+  <div class="sec-lbl">06 · 오늘 밤 가져가는 것</div>
+  <p class="take-title reveal">수료증 말고,<br><em>내일 바로 쓸 수 있는 것</em>을 드립니다</p>
+  <p class="take-sub reveal">90분이 끝나는 순간, 손에 잡히는 3가지가 있습니다.</p>
+
+  <div class="take-grid reveal d1">
+    <div class="take-card">
+      <div class="take-num">01</div>
+      <span class="take-icon">🎯</span>
+      <h3>내 AI 레벨<br>자가진단표</h3>
+      <p>AI 활용 7단계 중 지금 내가 어디에 있는지, 다음 단계는 무엇인지 명확해집니다.</p>
+      <span class="take-tag">당일 배포</span>
+    </div>
+    <div class="take-card">
+      <div class="take-num">02</div>
+      <span class="take-icon">📋</span>
+      <h3>직군별 프롬프트<br>라이브러리 5종</h3>
+      <p>기획자·마케터·팀장 직군에 맞게 설계된 프롬프트 템플릿. 내일 출근하면 그대로 씁니다.</p>
+      <span class="take-tag">즉시 사용 가능</span>
+    </div>
+    <div class="take-card">
+      <div class="take-num">03</div>
+      <span class="take-icon">🙋</span>
+      <h3>Kai 라이브 Q&A<br>내 상황 직접 질문</h3>
+      <p>"우리 팀은 어떻게 하면 될까요?" — 라이브 Q&A에서 직접 질문하실 수 있습니다.</p>
+      <span class="take-tag">현장에서만</span>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══ ⑭ SEATS (08) ═══ -->
+<div class="seats-wrap reveal">
+  <div class="seats-big">Q&A에서<br><em>직접 질문</em>하세요.</div>
+  <p class="seats-desc">강의를 파는 게 아닙니다.<br>Kai가 직접 피드백하고<br>여러분의 업무가 실제로 바뀌는 것을<br>확인하기 위한 결정입니다.</p>
+  <div class="seats-reason">
+    <span class="seats-chip">Kai 개인 피드백 가능</span>
+    <span class="seats-chip">내 실제 업무로 실습</span>
+    <span class="seats-chip">막히면 그 자리에서 해결</span>
+  </div>
+  <a href="#" class="btn-main" onclick="openModal();return false;">지금 신청하기</a>
+</div>
+
+
+
+<!-- ═══ ⑯ TESTIMONIALS (10) ═══ -->
+<section class="sec" style="border-top:1px solid #2E2E2E;background:#141414;">
+  <div class="sec-lbl">07 · 실제 후기</div>
+  <div class="test-grid reveal">
+    <div class="test-card">
+      <p class="test-txt">"Kai님은 대기업 내부를 살아본 사람이라 말이 다릅니다. 이론이 아니라 현장 언어로 얘기해줘서 바로 업무에 적용했어요."</p>
+      <div class="test-who"><div class="test-av">박○</div><div class="test-info"><p>IT 기업 기획팀장</p><span>AX 컨설팅 수강</span></div></div>
+    </div>
+    <div class="test-card">
+      <p class="test-txt">"클로드를 쓴다고 했는데 사실 검색처럼 쓰고 있었어요. 이제야 AI를 '제대로' 쓰는 게 뭔지 처음 알았습니다."</p>
+      <div class="test-who"><div class="test-av">김○</div><div class="test-info"><p>마케팅 에이전시 팀장</p><span>AX 교육 수강</span></div></div>
+    </div>
+    <div class="test-card">
+      <p class="test-txt">"공장 작업 진행 상태를 담당자마다 구글 스프레드시트로 따로 관리하고 있었습니다. Kai님이 직접 공장 프로세스 대시보드를 만들어주셨고, 그 과정에서 우리가 몰랐던 병목 지점을 찾아내 솔루션까지 설계해줬어요. 직원 교육까지 해주셔서 지금은 현장에서 응용해서 쓰고 있습니다."</p>
+      <div class="test-who"><div class="test-av">이○</div><div class="test-info"><p>제조업 대표</p><span>AX 기업 컨설팅 · 공장 프로세스 대시보드 구축 + 직원 교육</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ⑰ FAQ (11) — 신규 ═══ -->
+<section class="sec" style="border-top:1px solid #2E2E2E;">
+  <div class="sec-lbl">08 · 자주 묻는 질문</div>
+  <p class="faq-title reveal">혹시 이런 게<br>궁금하신가요?</p>
+  <p class="faq-sub reveal">신청 전 가장 많이 받는 질문을 모았습니다.</p>
+  <div class="faq-list reveal d1">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">정말 완전 무료인가요?<span class="faq-icon">+</span></div>
+      <div class="faq-a">네, 완전 무료입니다. 카드 정보도, 나중에 청구도 없습니다. 이름과 이메일만 입력하면 됩니다. 추가 교육 과정이 있으나 강요는 없습니다.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">AI를 거의 안 써봤는데 따라갈 수 있나요?<span class="faq-icon">+</span></div>
+      <div class="faq-a">ChatGPT나 Claude를 한 번이라도 열어보신 분이라면 충분합니다. 단, 아직 한 번도 써보지 않은 완전 입문자에게는 기초 세팅 과정을 먼저 권장드립니다.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">녹화본을 나중에 볼 수 있나요?<span class="faq-icon">+</span></div>
+      <div class="faq-a">이 웨비나는 라이브 Q&A와 실시간 시연이 핵심입니다. 녹화본은 제공되지 않습니다. 라이브 현장에서만 경험할 수 있기 때문입니다. 반드시 당일 참석해주세요.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">어떤 직군에게 맞나요?<span class="faq-icon">+</span></div>
+      <div class="faq-a">기획자, 마케터, 팀장·리더, 사업기획 담당자에게 가장 잘 맞습니다. 업무에서 AI를 써보려고 했는데 결과가 들쭉날쭉하거나, 어떻게 시작해야 할지 막막한 분이면 직군에 상관없이 도움이 됩니다. 개발자에게는 맞지 않습니다.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Zoom 링크는 언제 받나요?<span class="faq-icon">+</span></div>
+      <div class="faq-a">신청 완료 후 확인 이메일이 즉시 발송됩니다. Zoom 참가 링크는 웨비나 당일(5월 1일) 오후 7시에 이메일로 발송됩니다. 스팸함도 꼭 확인해주세요.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ⑱ FINAL CTA (12) ═══ -->
+<section class="final-cta" id="register">
+  <div class="final-bg">FREE</div>
+  <div class="final-badge">무료 웨비나 · 5월 1일 목요일</div>
+  <h2>3개월 뒤,<br>당신은 어느 쪽에<br><em>있을 건가요?</em></h2>
+  <p>AI를 쓰는 사람과 안 쓰는 사람의 격차는<br>3개월이면 따라잡을 수 없습니다.<br>지금 움직이는 사람이 앞서갑니다.</p>
+  <div class="detail-row">
+    <div class="d-item"><span class="d-lbl">DATE</span><span class="d-val">5월 1일 (목)</span></div>
+    <div class="d-item"><span class="d-lbl">TIME</span><span class="d-val">PM 8:00</span></div>
+    <div class="d-item"><span class="d-lbl">DURATION</span><span class="d-val">90분</span></div>
+    <div class="d-item"><span class="d-lbl">PRICE</span><span class="d-val ac">무료</span></div>
+  </div>
+  <div class="cd-big">
+    <div class="cd-bb"><div class="cd-bn" id="cd2-d">--</div><div class="cd-bu">DAYS</div></div>
+    <span class="cd-bs">:</span>
+    <div class="cd-bb"><div class="cd-bn" id="cd2-h">--</div><div class="cd-bu">HOURS</div></div>
+    <span class="cd-bs">:</span>
+    <div class="cd-bb"><div class="cd-bn" id="cd2-m">--</div><div class="cd-bu">MINS</div></div>
+    <span class="cd-bs">:</span>
+    <div class="cd-bb"><div class="cd-bn" id="cd2-s">--</div><div class="cd-bu">SECS</div></div>
+  </div>
+  <div class="reveal d2">
+    <a href="#" class="btn-main" style="width:100%;max-width:400px;display:block;text-align:center;margin:0 auto;" onclick="openModal();return false;">무료 참여 신청하기</a>
+    <p class="seats-note">완전 무료 · 당일 현장에서만 Q&A 참여 가능</p>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="f-inner">
+    <div class="f-logo">WAYMAKER LAB — 길을 만드는 연구소</div>
+    <div class="f-links">
+      <span class="f-copy">© 2026 WAYMAKER LAB · AI 교육 & 컨설팅</span>
+      <a href="mailto:waymakerlab@gmail.com" class="f-link">waymakerlab@gmail.com</a>
+      <button class="f-link" onclick="document.getElementById('privacy-modal').style.display='flex'">개인정보처리방침</button>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ FLOATING CTA ═══ -->
+<a href="#" class="float-cta" id="float-btn" onclick="openModal();return false;">지금 무료 신청하기 →</a>
+
+<!-- ═══ SIGNUP MODAL ═══ -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2>무료 웨비나 신청</h2>
+    <p class="modal-sub">5월 1일 (목) 오후 8시<br>신청 완료 후 확인 이메일을 드립니다.</p>
+    <div id="form-area">
+      <div class="form-group">
+        <label>이름 <span style="color:#F5A623">*</span></label>
+        <input type="text" id="f-name" placeholder="홍길동" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label>이메일 <span style="color:#F5A623">*</span></label>
+        <input type="email" id="f-email" placeholder="example@email.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label>전화번호 <span class="form-optional">선택</span></label>
+        <input type="tel" id="f-phone" placeholder="010-0000-0000" autocomplete="tel">
+      </div>
+      <button class="btn-submit" id="f-submit" onclick="submitForm()">신청 완료하기</button>
+      <p class="privacy-note">입력하신 정보는 웨비나 운영 목적으로만 사용됩니다.<br>
+        <button class="privacy-link" onclick="closeModal();document.getElementById('privacy-modal').style.display='flex'">개인정보처리방침 보기</button>
+      </p>
+    </div>
+    <div class="form-done" id="form-done">
+      <h3>신청 완료! 🎉</h3>
+      <p>입력하신 이메일로<br>확인 메일을 보내드렸습니다.<br><br>5월 1일 오후 7시에<br>Zoom 링크가 발송됩니다.<br><br>스팸함도 꼭 확인해주세요!</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PRIVACY MODAL ═══ -->
+<div id="privacy-modal" style="display:none;position:fixed;inset:0;background:rgba(13,43,75,.5);z-index:600;align-items:center;justify-content:center;padding:1rem;" onclick="if(event.target===this)this.style.display='none'">
+  <div class="priv-modal">
+    <button onclick="document.getElementById('privacy-modal').style.display='none'" style="position:absolute;top:1rem;right:1rem;font-size:20px;color:#9A9A9A;cursor:pointer;background:none;border:none;">✕</button>
+    <h2>개인정보처리방침</h2>
+    <p><strong>수집 항목</strong>이름, 이메일 주소, 전화번호(선택)</p>
+    <p><strong>수집 목적</strong>웨비나 참가 확인 및 Zoom 링크 발송, 이후 교육 일정 안내</p>
+    <p><strong>보유 기간</strong>웨비나 종료 후 1년. 이후 즉시 파기합니다.</p>
+    <p><strong>제3자 제공</strong>수집된 정보는 외부에 제공되지 않습니다.</p>
+    <p><strong>문의</strong>waymakerlab@gmail.com</p>
+  </div>
+</div>
+
+<script>
+// ── COUNTDOWN ──
+const TARGET = new Date('2026-05-01T20:00:00+09:00').getTime();
+function pad(n){return String(n).padStart(2,'0');}
+function tick(){
+  const diff = TARGET - Date.now();
+  if(diff<=0){
+    document.getElementById('cd-bar').innerHTML='<span style="font-family:monospace;font-size:13px;color:#F5A623;">🔴 지금 진행 중입니다!</span>';
+    return;
+  }
+  const d=Math.floor(diff/86400000),h=Math.floor(diff%86400000/3600000),
+        m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000);
+  [['cd-d',d],['cd-h',h],['cd-m',m],['cd-s',s],
+   ['cd2-d',d],['cd2-h',h],['cd2-m',m],['cd2-s',s]]
+  .forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=pad(v);});
+}
+tick();setInterval(tick,1000);
+
+// ── SCROLL REVEAL ──
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((en,i)=>{if(en.isIntersecting)setTimeout(()=>en.target.classList.add('on'),i*80);});
+},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ── FLOAT CTA ──
+const floatBtn=document.getElementById('float-btn');
+window.addEventListener('scroll',()=>{floatBtn.classList.toggle('show',window.scrollY>700);});
+
+// ── MODAL ──
+function openModal(){document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow='';}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+
+// ── FAQ ──
+function toggleFaq(el){
+  const item=el.parentElement;
+  const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen)item.classList.add('open');
+}
+
+// ── FORM ──
+const GAS_URL='https://script.google.com/macros/s/AKfycbxkpzoP5rok7I_vxU-Vh47G8B7crGevWHkRcLfVtXNYKoRRCD66P71A-Ah1QLw1gffx/exec';
+function submitForm(){
+  const name=document.getElementById('f-name').value.trim();
+  const email=document.getElementById('f-email').value.trim();
+  const phone=document.getElementById('f-phone').value.trim();
+  if(!name){document.getElementById('f-name').style.borderColor='var(--red)';document.getElementById('f-name').focus();return;}
+  if(!email||!email.includes('@')){document.getElementById('f-email').style.borderColor='var(--red)';document.getElementById('f-email').focus();return;}
+  const btn=document.getElementById('f-submit');
+  btn.disabled=true;btn.textContent='신청 중...';
+  setTimeout(()=>{
+    document.getElementById('form-area').style.display='none';
+    document.getElementById('form-done').style.display='block';
+  },600);
+  fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name,email,phone:phone||'',timestamp:new Date().toISOString()})
+  }).catch(()=>{});
+}
+document.querySelectorAll('.form-group input').forEach(el=>{
+  el.addEventListener('input',()=>{el.style.borderColor='';});
+});
+</script>
+</body>
+</html>
